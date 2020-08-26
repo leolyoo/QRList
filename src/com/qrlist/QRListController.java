@@ -2,10 +2,13 @@ package com.qrlist;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class QRListController implements KeyListener {
     private final QRListView view;
     private final QRListModel model;
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     public QRListController() {
         model = new QRListModel();
@@ -28,8 +31,7 @@ public class QRListController implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             String s = view.getNumberFieldText().trim();
             if (s.length() > 0) {
-                model.addRow(s);
-                model.fireTableDataChanged();
+                model.addRow(DATE_FORMAT.format(new Date()), s);
                 view.refreshNumberField();
             }
         }

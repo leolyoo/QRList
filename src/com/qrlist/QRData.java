@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.Objects;
 
 public class QRData {
-    public final Date date;
+    public final String date;
     public final String qr;
 
-    public QRData(String qr) {
-        date = new Date();
+    public QRData(String date, String qr) {
+        this.date = date;
         this.qr = qr;
     }
 

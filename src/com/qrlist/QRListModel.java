@@ -1,6 +1,7 @@
 package com.qrlist;
 
 import javax.swing.table.AbstractTableModel;
+import java.sql.*;
 import java.util.Vector;
 
 public class QRListModel extends AbstractTableModel {
@@ -8,7 +9,8 @@ public class QRListModel extends AbstractTableModel {
     private final Vector<QRData> data = new Vector<>();
 
     public QRListModel() {
-
+        SQLiteHelper.createTable();
+        data.addAll(SQLiteHelper.selectAll());
     }
 
     @Override
@@ -33,7 +35,9 @@ public class QRListModel extends AbstractTableModel {
         return COLUMN_NAMES[column];
     }
 
-    public void addRow(String qr) {
-        data.add(new QRData(qr));
+    public void addRow(String date, String qr) {
+        data.add(new QRData(date, qr));
+        SQLiteHelper.insert(date, qr);
+        fireTableDataChanged();
     }
 }
