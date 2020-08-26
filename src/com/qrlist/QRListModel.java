@@ -1,7 +1,6 @@
 package com.qrlist;
 
 import javax.swing.table.AbstractTableModel;
-import java.sql.*;
 import java.util.Vector;
 
 public class QRListModel extends AbstractTableModel {
