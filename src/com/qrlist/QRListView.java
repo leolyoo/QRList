@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.KeyListener;
 
 public class QRListView extends JFrame {
-    private static final String TITLE = "QRList";
+    private static final String TITLE = "[학생지원팀] 입출입 관리 시스템";
     private static final int WIDTH = 500;
     private static final int HEIGHT = 500;
 

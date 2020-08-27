@@ -3,8 +3,9 @@ package com.qrlist;
 import javax.sound.sampled.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,6 @@ public class QRListController implements KeyListener {
     private final QRListView view;
     private final QRListModel model;
     private static final StringBuilder LOG = new StringBuilder();
-    private static final File SOUND_FILE = new File("resources/sound_enter.wav");
 
     public QRListController(QRListModel model, QRListView view) {
         this.model = model;
@@ -50,7 +50,9 @@ public class QRListController implements KeyListener {
     }
 
     private void sound() {
-        try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(SOUND_FILE)) {
+        try (InputStream audioSource = this.getClass().getClassLoader().getResourceAsStream("sound_enter.wav");
+             InputStream bufferedInputStream = new BufferedInputStream(audioSource);
+             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream)) {
             Clip clip = AudioSystem.getClip();
             clip.stop();
             clip.open(audioInputStream);

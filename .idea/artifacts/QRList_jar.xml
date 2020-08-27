@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="QRList:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/QRList_jar</output-path>
+    <root id="archive" name="QRList.jar">
+      <element id="module-output" name="QRList" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/lib/sqlite-jdbc-3.32.3.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
