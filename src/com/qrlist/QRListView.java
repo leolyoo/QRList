@@ -11,6 +11,7 @@ public class QRListView extends JFrame {
 
     private final NumberField numberField;
     private final JTable table;
+    private final JTextArea logArea;
 
     public QRListView(QRListModel qrListModel) {
         setTitle(TITLE);
@@ -19,9 +20,11 @@ public class QRListView extends JFrame {
 
         numberField = new NumberField();
         table = new JTable(qrListModel);
+        logArea = new JTextArea();
+        logArea.setEditable(false);
 
         add(numberField, BorderLayout.NORTH);
-
+        add(logArea, BorderLayout.SOUTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         setVisible(true);
@@ -37,5 +40,9 @@ public class QRListView extends JFrame {
 
     public void setNumberFieldKeyListener(KeyListener keyListener) {
         numberField.addKeyListener(keyListener);
+    }
+
+    public void setLogArea(StringBuilder log) {
+        logArea.setText(String.valueOf(log));
     }
 }

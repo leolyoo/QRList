@@ -1,13 +1,15 @@
 package com.qrlist;
 
 import javax.swing.table.AbstractTableModel;
+import java.sql.SQLException;
 import java.util.Vector;
 
 public class QRListModel extends AbstractTableModel {
     private static final String[] COLUMN_NAMES = {"date", "qr"};
     private final Vector<QRData> data = new Vector<>();
 
-    public QRListModel() {
+    public QRListModel() throws ClassNotFoundException, SQLException {
+        SQLiteHelper.isReady();
         SQLiteHelper.createTable();
         data.addAll(SQLiteHelper.selectAll());
     }
@@ -34,9 +36,9 @@ public class QRListModel extends AbstractTableModel {
         return COLUMN_NAMES[column];
     }
 
-    public void addRow(String date, String qr) {
-        data.add(new QRData(date, qr));
+    public void addRow(String date, String qr) throws SQLException {
         SQLiteHelper.insert(date, qr);
+        data.add(new QRData(date, qr));
         fireTableDataChanged();
     }
 }
