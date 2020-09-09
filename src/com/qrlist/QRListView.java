@@ -2,6 +2,7 @@ package com.qrlist;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
 public class QRListView extends JFrame {
@@ -10,8 +11,8 @@ public class QRListView extends JFrame {
     private static final int HEIGHT = 500;
 
     private final NumberField numberField;
-    private final JTable table;
     private final JTextArea logArea;
+    private final JButton excelButton;
 
     public QRListView(QRListModel qrListModel) {
         setTitle(TITLE);
@@ -19,13 +20,16 @@ public class QRListView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         numberField = new NumberField();
-        table = new JTable(qrListModel);
+        JTable table = new JTable(qrListModel);
         logArea = new JTextArea();
         logArea.setEditable(false);
+        excelButton = new JButton("Excel");
+        excelButton.setActionCommand("excel");
 
         add(numberField, BorderLayout.NORTH);
         add(logArea, BorderLayout.SOUTH);
         add(new JScrollPane(table), BorderLayout.CENTER);
+        add(excelButton, BorderLayout.SOUTH);
 
         setVisible(true);
     }
@@ -44,5 +48,9 @@ public class QRListView extends JFrame {
 
     public void setLogArea(StringBuilder log) {
         logArea.setText(String.valueOf(log));
+    }
+
+    public void setExcelButtonActionListener(ActionListener actionListener) {
+        excelButton.addActionListener(actionListener);
     }
 }

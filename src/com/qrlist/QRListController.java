@@ -1,25 +1,27 @@
 package com.qrlist;
 
 import javax.sound.sampled.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class QRListController implements KeyListener {
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+public class QRListController implements KeyListener, ActionListener {
     private final QRListView view;
     private final QRListModel model;
-    private static final StringBuilder LOG = new StringBuilder();
+    private final ExcelHelper excelHelper;
 
     public QRListController(QRListModel model, QRListView view) {
         this.model = model;
         this.view = view;
         view.setNumberFieldKeyListener(this);
+        excelHelper = new ExcelHelper(model);
+        view.setExcelButtonActionListener(this);
     }
 
     @Override
@@ -38,11 +40,11 @@ public class QRListController implements KeyListener {
             String qr = view.getNumberFieldText().trim();
             if (qr.length() > 0) {
                 try {
-                    model.addRow(DATE_FORMAT.format(new Date()), qr);
+                    model.addRow(Constants.DATE_FORMAT.format(new Date()), qr);
                     sound();
                 } catch (SQLException sqlException) {
-                    LOG.append(sqlException.getMessage()).append("\n");
-                    view.setLogArea(LOG);
+                    Constants.LOG.append(sqlException.getMessage()).append("\n");
+                    view.setLogArea(Constants.LOG);
                 }
                 view.refreshNumberField();
             }
@@ -50,15 +52,24 @@ public class QRListController implements KeyListener {
     }
 
     private void sound() {
-        try (InputStream audioSource = this.getClass().getClassLoader().getResourceAsStream("sound_enter.wav");
-             InputStream bufferedInputStream = new BufferedInputStream(audioSource);
-             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream)) {
-            Clip clip = AudioSystem.getClip();
-            clip.stop();
-            clip.open(audioInputStream);
-            clip.start();
+        try (InputStream audioSource = this.getClass().getClassLoader().getResourceAsStream("sound_enter.wav")) {
+            assert audioSource != null;
+            try (InputStream bufferedInputStream = new BufferedInputStream(audioSource);
+                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream)) {
+                Clip clip = AudioSystem.getClip();
+                clip.stop();
+                clip.open(audioInputStream);
+                clip.start();
+            }
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand().equals("excel")) {
+            excelHelper.export();
         }
     }
 }
